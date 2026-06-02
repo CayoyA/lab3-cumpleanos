@@ -1,0 +1,52 @@
+pipeline {
+    agent {
+        kubernetes {
+            yamlFile 'agent.yaml'
+        }
+    }
+    environment {
+        DOCKER_USER    = 'cayoya'
+        REGISTRY_IMAGE = "${DOCKER_USER}/tarea-final:cgloria-munoz"
+        DOCKER_CREDS   = credentials('docker-hub-credentials-id')
+    }
+    stages {
+        stage('install') {
+            steps {
+                echo '=== ETAPA 1: INSTALANDO DEPENDENCIAS ==='
+                sh 'npm install'
+            }
+        }
+        stage('test') {
+            steps {
+                echo '=== ETAPA 2: EJECUTANDO PRUEBAS ==='
+                sh 'npm test'
+            }
+        }
+        stage('build') {
+            steps {
+                container('docker') {
+                    echo '=== ETAPA 3: CONSTRUYENDO IMAGEN DOCKER ==='
+                    sh "docker build -t ${REGISTRY_IMAGE} ."
+                }
+            }
+        }
+        stage('push') {
+            steps {
+                container('docker') {
+                    echo '=== ETAPA 4: PUBLICANDO EN DOCKER HUB ==='
+                    sh "echo \$DOCKER_CREDS_PSW | docker login -u \$DOCKER_CREDS_USR --password-stdin"
+                    sh "docker push ${REGISTRY_IMAGE}"
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                container('kubectl') {
+                    echo '=== ETAPA 5: DESPLEGANDO EN KUBERNETES ==='
+                    sh "kubectl apply -f entrega.yaml"
+                    sh "kubectl get all -n ns-cgloria-munoz"
+                }
+            }
+        }
+    }
+}

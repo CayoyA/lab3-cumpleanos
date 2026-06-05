@@ -34,7 +34,8 @@ pipeline {
             steps {
                 container('docker') {
                     echo '=== ETAPA 4: PUBLICANDO EN DOCKER HUB ==='
-                    sh "echo \$DOCKER_CREDS_PSW | docker login -u \$DOCKER_CREDS_USR --password-stdin"
+                    // ESTA ES LA ÚNICA LÍNEA QUE CAMBIÓ:
+                    sh 'echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin'
                     sh "docker push ${REGISTRY_IMAGE}"
                 }
             }

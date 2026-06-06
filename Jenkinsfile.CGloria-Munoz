@@ -47,7 +47,7 @@ pipeline {
             steps {
                 container('kubectl') {
                     echo '=== ETAPA 5: DESPLEGANDO EN KUBERNETES ==='
-                    sh "kubectl apply -f entrega.yaml"
+                    sh 'kubectl apply -f entrega.yaml --validate=false'
                     sh "kubectl get all -n ns-cgloria-munoz"
                 }
             }

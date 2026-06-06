@@ -34,6 +34,7 @@ El flujo configurado en Jenkins ejecuta de forma automática los siguientes paso
 Para comprobar que el pipeline cumplió su objetivo y que la aplicación NestJS está corriendo de forma óptima en el clúster, ejecute los siguientes comandos en su terminal paso a paso:
 
 ### 1. Verificar el estado de los Pods y Réplicas
+<<<<<<< HEAD
 
 Confirme que se crearon y están activas las 2 réplicas solicitadas dentro del Namespace exclusivo del proyecto:
 
@@ -55,4 +56,25 @@ kubectl port-forward svc/svc-cgloria-munoz 8888:80 -n ns-cgloria-munoz
 
 curl http://localhost:8888/lab
 
+=======
+Confirme que se crearon y están activas las 2 réplicas solicitadas dentro del Namespace exclusivo del proyecto:
+
+kubectl get pods -n ns-cgloria-munoz
+
+
+## 2. Validar ConfigMaps y Secrets (Inyección de Variables)
+Para confirmar que el Secret (codificado en Base64) y el ConfigMap inyectaron correctamente las credenciales en el contenedor NestJS:
+
+kubectl exec deployment/app-cgloria-munoz -n ns-cgloria-munoz -- printenv | grep -E "AMBIENTE|API_KEY"
+
+
+## 3. Prueba de Acceso a la Aplicación (Port-Forward)
+Realice un mapeo de puertos hacia el Service de Kubernetes para probar el endpoint de la aplicación en caliente:
+￼
+kubectl port-forward svc/svc-cgloria-munoz 8888:80 -n ns-cgloria-munoz
+
+## 4. Abra otra pestaña de la terminal o su navegador y realice la petición de prueba con curl:
+curl http://localhost:8888/lab
+
+>>>>>>> 8f6f2068b2344772c034bbc289885673b03948f3
 Respuesta exitosa esperada: Hola profesor! Servidor operativo. Ambiente K8s: produccion-local | API_KEY: mi-clave-secreta-2026 | Despliegue exitoso por Carmen Gloria Muñoz

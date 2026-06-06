@@ -48,11 +48,11 @@ spec:
       tty: true
       resources:
         requests:
-          memory: '512Mi'
-          cpu: '300m'
-        limits:
           memory: '1024Mi'
           cpu: '500m'
+        limits:
+          memory: '2048Mi'
+          cpu: '1000m'
   volumes:
     - name: docker-sock
       hostPath:

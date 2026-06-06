@@ -2,6 +2,7 @@ pipeline {
     agent {
         kubernetes {
             yamlFile 'agent.yaml'
+            tunnel ''
         }
     }
     environment {

@@ -2,15 +2,11 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    some-label: jenkins-agent
+    jenkins: agent
 spec:
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
-
-      env:
-        - name: JENKINS_TUNNEL
-          value: ''
     - name: node
       image: node:18-alpine
       command:

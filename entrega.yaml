@@ -9,7 +9,7 @@ metadata:
   name: config-cgloria-munoz
   namespace: ns-cgloria-munoz
 data:
-  AMBIENTE: 'produccion'
+  AMBIENTE: 'produccion-local'
 ---
 apiVersion: v1
 kind: Secret
@@ -17,8 +17,8 @@ metadata:
   name: secret-cgloria-munoz
   namespace: ns-cgloria-munoz
 type: Opaque
-stringData:
-  API_KEY: 'secret-key-laboratorio-3-cgloria'
+data:
+  API_KEY: bWktY2xhdmUtc2VjcmV0YS0yMDI2
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -36,8 +36,8 @@ spec:
         app: app-cgloria-munoz
     spec:
       containers:
-        - name: node-app
-          image: cayoya-dockerhub/tarea-final:cgloria-munoz
+        - name: web-app
+          image: tu-usuario-dockerhub/tarea-final:3.0.0
           ports:
             - containerPort: 5000
           env:

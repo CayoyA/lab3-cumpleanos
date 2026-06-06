@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "install": "npm install",
     "test": "echo 'Ejecutando pruebas unitarias... Pasado con éxito OK'"
   },
   "dependencies": {

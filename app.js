@@ -2,20 +2,13 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Habilitar que Express pueda leer los datos de formularios web
 app.use(express.urlencoded({ extended: true }));
 
-// Base de datos temporal en memoria para guardar los cumpleaños
-let listaCumpleanos = [
-  { id: 1, nombre: 'Carmen Gloria', fecha: '1974-11-25' }, // Agregamos un ID para poder borrarlo
-];
+let listaCumpleanos = [{ id: 1, nombre: 'Carmen Gloria', fecha: '1974-11-25' }];
 
-// Contador para generar IDs únicos a los nuevos registros
 let idContador = 2;
 
-// 1. RUTA PRINCIPAL: Muestra el formulario y la lista con botón de eliminar
 app.get('/', (req, res) => {
-  // Construir las filas de la tabla con el botón de eliminar asociado al ID
   let filasTabla = listaCumpleanos
     .map(
       (c) => `
@@ -33,7 +26,6 @@ app.get('/', (req, res) => {
     )
     .join('');
 
-  // Responder con la página web completa
   res.send(`
         <html>
         <head><title>Recordatorio de Cumpleaños</title></head>
@@ -79,7 +71,15 @@ app.get('/', (req, res) => {
     `);
 });
 
-// 2. RUTA POST /GUARDAR: Recibe datos y los guarda asignando un ID
+app.get('/lab', (req, res) => {
+  const ambiente = process.env.AMBIENTE || 'No configurado';
+  const apiKey = process.env.API_KEY || 'No configurada';
+
+  res.send(
+    `Hola profesor! Servidor operativo. Ambiente K8s: ${ambiente} | API_KEY: ${apiKey} | Despliegue exitoso por Carmen Gloria Muñoz.`,
+  );
+});
+
 app.post('/guardar', (req, res) => {
   const { nombre, fecha } = req.body;
   if (nombre && fecha) {
@@ -91,7 +91,6 @@ app.post('/guardar', (req, res) => {
   res.redirect('/');
 });
 
-// 3. RUTA POST /ELIMINAR: Filtra la lista eliminando el registro por su ID
 app.post('/eliminar', (req, res) => {
   const idParaEliminar = parseInt(req.body.id);
   const registro = listaCumpleanos.find((c) => c.id === idParaEliminar);
@@ -105,7 +104,6 @@ app.post('/eliminar', (req, res) => {
   res.redirect('/');
 });
 
-// 4. SIMULADOR DE RECORDATORIOS (Corre en segundo plano cada 30 segundos)
 setInterval(() => {
   console.log(
     '\n⏰ [SISTEMA] Ejecutando revisión matutina de alertas de cumpleaños...',
@@ -131,7 +129,6 @@ setInterval(() => {
   });
 }, 30000);
 
-// Iniciar el servidor
 app.listen(port, () => {
   console.log(`Aplicación de Cumpleaños operativa en el puerto ${port}`);
 });

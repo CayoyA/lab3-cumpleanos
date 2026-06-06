@@ -9,11 +9,11 @@ spec:
       image: jenkins/inbound-agent:latest
       resources:
         requests:
-          memory: '256Mi'
-          cpu: '100m'
-        limits:
           memory: '512Mi'
-          cpu: '200m'
+          cpu: '300m'
+        limits:
+          memory: '1024Mi'
+          cpu: '500m'
     - name: node
       image: node:18-alpine
       command:
@@ -21,11 +21,11 @@ spec:
       tty: true
       resources:
         requests:
-          memory: '256Mi'
-          cpu: '100m'
-        limits:
           memory: '512Mi'
           cpu: '300m'
+        limits:
+          memory: '1024Mi'
+          cpu: '1000m'
     - name: docker
       image: docker:latest
       command:
@@ -36,11 +36,11 @@ spec:
           name: docker-sock
       resources:
         requests:
-          memory: '128Mi'
-          cpu: '50m'
-        limits:
           memory: '256Mi'
-          cpu: '100m'
+          cpu: '200m'
+        limits:
+          memory: '512Mi'
+          cpu: '500m'
     - name: kubectl
       image: bitnami/kubectl:latest
       command:
@@ -48,11 +48,11 @@ spec:
       tty: true
       resources:
         requests:
-          memory: '128Mi'
-          cpu: '50m'
+          memory: '512Mi'
+          cpu: '300m'
         limits:
-          memory: '256Mi'
-          cpu: '100m'
+          memory: '1024Mi'
+          cpu: '500m'
   volumes:
     - name: docker-sock
       hostPath:

@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-cgloria-munoz
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-cgloria-munoz
+  namespace: ns-cgloria-munoz
+data:
+  AMBIENTE: 'produccion-clúster'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-cgloria-munoz
+  namespace: ns-cgloria-munoz
+type: Opaque
+stringData:
+  API_KEY: 'secret-key-laboratorio-3-cgloria'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cgloria-munoz
+  namespace: ns-cgloria-munoz
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-cgloria-munoz
+  template:
+    metadata:
+      labels:
+        app: app-cgloria-munoz
+    spec:
+      containers:
+        - name: node-app
+          image: cayoya/tarea-final:cgloria-munoz
+          ports:
+            - containerPort: 5000
+          env:
+            - name: AMBIENTE
+              valueFrom:
+                configMapKeyRef:
+                  name: config-cgloria-munoz
+                  key: AMBIENTE
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-cgloria-munoz
+                  key: API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-cgloria-munoz
+  namespace: ns-cgloria-munoz
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30080
+  selector:
+    app: app-cgloria-munoz

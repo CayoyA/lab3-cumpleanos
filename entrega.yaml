@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: web-app
-          image: tu-usuario-dockerhub/tarea-final:3.0.0
+          image: cayoya/tarea-final:cgloria-munoz
           ports:
             - containerPort: 5000
           env:

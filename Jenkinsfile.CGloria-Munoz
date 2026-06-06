@@ -12,16 +12,20 @@ pipeline {
     stages {
         stage('install') {
             steps {
+                container('node') { // <--- Lo metemos en el contenedor de Node
                 echo '=== ETAPA 1: INSTALANDO DEPENDENCIAS ==='
                 sh 'npm install'
             }
         }
+    }
         stage('test') {
             steps {
+                container('node') { // <--- Lo metemos en el contenedor de Node
                 echo '=== ETAPA 2: EJECUTANDO PRUEBAS ==='
                 sh 'npm test'
             }
         }
+    }
         stage('build') {
             steps {
                 container('docker') {
@@ -34,7 +38,6 @@ pipeline {
             steps {
                 container('docker') {
                     echo '=== ETAPA 4: PUBLICANDO EN DOCKER HUB ==='
-                    // ESTA ES LA ÚNICA LÍNEA QUE CAMBIÓ:
                     sh 'echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin'
                     sh "docker push ${REGISTRY_IMAGE}"
                 }
